@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Two focused viewers for a graph attention workshop.">
+  <title>NetFit Viewer</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./graph.js" defer></script>
+  <script src="./example.js" defer></script>
+  <script src="./app.js" defer></script>
+  <script src="./actions-core.js" defer></script>
+  <script src="./actions-view.js" defer></script>
+</head>
+<body>
+  <main class="workspace">
+    <header class="page-header">
+      <p class="eyebrow">GRAPH ATTENTION WORKSHOP</p>
+      <h1>NetFit Viewer</h1>
+      <p class="intro">Explore environments, inspect connections, and understand movement.</p>
+    </header>
+
+    <section class="viewer-controls" aria-label="Viewer selection">
+      <div class="select-field">
+        <label for="viewer-select">Choose a viewer</label>
+        <select id="viewer-select" aria-controls="viewer-observations viewer-actions">
+          <option value="observations">Viewer: 1</option>
+          <option value="actions">Viewer: 2</option>
+        </select>
+      </div>
+      <span class="status" id="view-status">Interactive viewer</span>
+    </section>
+
+    <div id="viewer-content">
+      <section id="viewer-observations" class="viewer-panel" aria-labelledby="observations-title" hidden>
+        <div class="observation-heading">
+          <div><p class="eyebrow">Viewer: 1</p><h2 id="observations-title">What can this node observe?</h2><p>Choose a node to follow the messages arriving from its neighbours.</p></div>
+          <button id="load-example" type="button">Use example</button>
+        </div>
+        <div class="load-row"><div><label for="scene-file">Open an environment</label><input id="scene-file" type="file" accept=".json,application/json" aria-describedby="file-help"></div><p id="file-help">Choose one JSON from your notebook. Files stay in your browser.</p></div>
+        <p id="load-error" class="error" role="alert" hidden></p>
+        <p id="scene-summary" class="scene-summary" role="status"></p>
+        <div class="observation-options">
+          <div><label for="road-direction">Road messages</label><select id="road-direction"><option value="both">Both directions</option><option value="stored">One direction (stored order)</option></select></div>
+          <label class="check"><input type="checkbox" id="self-enabled" checked> Include self-messages</label>
+          <label class="check"><input type="checkbox" id="show-labels" checked> Node IDs</label>
+        </div>
+        <p id="direction-note" class="teaching-note"></p>
+        <div class="observation-layout">
+          <div class="canvas-wrap">
+            <svg id="graph-canvas" viewBox="0 0 800 620" role="group" aria-label="Environment graph. Select a node to inspect its incoming messages."></svg>
+            <div class="legend"><span><i class="road-key"></i>Road node / road</span><span><i class="building-key"></i>Building footprint</span><span><i class="selected-key"></i>Selected</span></div>
+            <p class="canvas-caption">Click a node to inspect it. Use Open neighbourhood for details. Coordinates use x right, y up.</p>
+          </div>
+          <aside class="inspector" aria-label="Selected node inspector">
+            <label for="node-select">Inspect a road node</label><select id="node-select"></select>
+            <h3 id="node-title"></h3><dl class="feature-grid" id="node-features"></dl>
+            <div class="message-stat"><strong id="incoming-count">0</strong><span>incoming messages</span></div>
+            <p id="incoming-summary" class="muted"></p><div id="neighbour-list" class="neighbour-list"></div>
+            <button type="button" id="open-neighbourhood" class="primary">Open neighbourhood</button>
+            <p class="inspector-note">One-hop connections show available information. Multiple graph layers can reach farther. No model or attention weights are running here.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section id="viewer-actions" class="viewer-panel" aria-labelledby="actions-title" hidden>
+        <div class="observation-heading">
+          <div><p class="eyebrow">Viewer: 2</p><h2 id="actions-title">How does a move change the score?</h2><p>Move a road node one unit at a time and watch the intersecting road lengths change.</p></div>
+          <button id="actions-example" type="button">Use example</button>
+        </div>
+        <div class="load-row"><div><label for="actions-file">Open an environment</label><input id="actions-file" type="file" accept=".json,application/json" aria-describedby="actions-file-help"></div><p id="actions-file-help">Choose one environment JSON. Buildings and road connections stay fixed.</p></div>
+        <p id="actions-error" class="error" role="alert" hidden></p>
+        <p id="actions-summary" class="scene-summary" role="status"></p>
+        <div class="score-cards">
+          <div class="score-card"><span>Current score</span><strong id="actions-score">0</strong><small>Closer to zero is better</small></div>
+          <div class="score-card"><span>Last move reward</span><strong id="actions-reward">&mdash;</strong><small>New score minus previous score</small></div>
+          <div class="score-card"><span>Inside buildings</span><strong id="actions-intersection">0</strong><small>Physical road length</small></div>
+          <div class="score-card"><span>Outside site</span><strong id="actions-offsite">0</strong><small>Physical road length</small></div>
+        </div>
+        <div class="observation-layout actions-layout">
+          <div class="canvas-wrap">
+            <svg id="actions-canvas" viewBox="0 0 800 620" tabindex="0" role="group" aria-label="Road layout. Select a node, then use arrow keys to move it one unit." aria-describedby="movement-help"></svg>
+            <div class="legend"><span><i class="road-key"></i>Road</span><span><i class="intersection-key"></i>Inside a building</span><span><i class="offsite-key"></i>Outside the site</span><span><i class="selected-key"></i>Selected node</span></div>
+            <p class="canvas-caption">Highlighted segments show intersection length, not road surface area.</p>
+          </div>
+          <aside class="inspector" aria-label="Movement controls">
+            <label for="actions-node">Move a road node</label><select id="actions-node"></select>
+            <h3 id="actions-node-title"></h3><dl class="feature-grid" id="actions-coordinates"></dl>
+            <p id="movement-help" class="muted">Click a node, then use your keyboard arrows or these buttons. Each press moves it by 1 unit.</p>
+            <div class="direction-pad" aria-label="Move selected node">
+              <button id="move-up" class="move-up" type="button" aria-label="Move up one unit" title="Up: y + 1">&#8593;</button>
+              <button id="move-left" class="move-left" type="button" aria-label="Move left one unit" title="Left: x - 1">&#8592;</button>
+              <span class="move-step" aria-hidden="true">1</span>
+              <button id="move-right" class="move-right" type="button" aria-label="Move right one unit" title="Right: x + 1">&#8594;</button>
+              <button id="move-down" class="move-down" type="button" aria-label="Move down one unit" title="Down: y - 1">&#8595;</button>
+            </div>
+            <div class="action-tools"><button id="actions-undo" type="button" disabled>Undo</button><button id="actions-reset" type="button" disabled>Reset layout</button></div>
+            <p id="actions-change" class="movement-status" role="status" aria-live="polite">Select a node to begin.</p>
+            <dl class="feature-grid"><dt>Moves</dt><dd id="actions-steps">0</dd><dt>Starting score</dt><dd id="actions-start">0</dd></dl>
+          </aside>
+        </div>
+        <details class="score-explanation">
+          <summary>How is the score calculated?</summary>
+          <p>Score = &minus;(0.4 &times; intersection penalty length + 0.6 &times; off-site penalty length). Each road is counted in both stored directions. A building contact contributes at least 0.0001, including a road node's self-edge when it touches or enters a building. The length cards above count each physical road once.</p>
+          <p id="actions-formula"></p>
+          <p>A positive reward means the last move improved the score. Connected segments follow the moved node; the road connections do not change. Boundary nodes can move off-site. Coordinates use the original 32-bit movement precision.</p>
+        </details>
+        <details class="intersection-details">
+          <summary>Intersecting road segments <span id="actions-hit-count"></span></summary>
+          <div class="table-scroll"><table><caption>Physical intersection lengths, each road counted once per building</caption><thead><tr><th scope="col">Road</th><th scope="col">Endpoints</th><th scope="col">Building</th><th scope="col">Length</th></tr></thead><tbody id="actions-hits"></tbody></table></div>
+          <p id="actions-no-hits" class="muted">No road segments touch or cross a building.</p>
+        </details>
+      </section>
+    </div>
+    <dialog id="neighbourhood-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-heading"><div><p class="eyebrow">INCOMING NEIGHBOURHOOD</p><h2 id="dialog-title"></h2></div><button id="close-dialog" type="button" autofocus>Close</button></div>
+      <p id="dialog-description" class="muted"></p>
+      <div class="table-scroll"><table><caption>Messages received in one graph layer</caption><thead><tr><th scope="col">From</th><th scope="col">Node type</th><th scope="col">x</th><th scope="col">y</th><th scope="col">Edge type</th><th scope="col">To</th></tr></thead><tbody id="dialog-neighbours"></tbody></table></div>
+      <p id="dialog-empty" hidden>No incoming messages under these settings.</p>
+      <p class="teaching-note">Only road nodes appear in this neighbourhood. Building footprints provide spatial context but send no messages.</p>
+    </dialog>
+    <footer>Two focused views. One shared environment format.</footer>
+    <noscript><p>Enable JavaScript to switch between viewers.</p></noscript>
+  </main>
+</body>
+</html>
