@@ -27,17 +27,17 @@ const scope={console,GraphObservations:require("../graph.js"),location:{hash:"#a
   querySelectorAll:()=>["viewer-observations","viewer-actions"].map(id=>elements[id]),
   createElement:tag=>new Element(tag),createElementNS:(_,tag)=>new Element(tag),createDocumentFragment:()=>new Element("fragment")
 }};
-vm.createContext(scope);vm.runInContext(fs.readFileSync(path.join(root,"example.js"),"utf8"),scope);scope.exampleEnvironment=scope.window.exampleEnvironment;
+vm.createContext(scope);vm.runInContext(fs.readFileSync(path.join(root,"example.js"),"utf8"),scope);scope.exampleScenario=scope.window.exampleScenario;
 vm.runInContext(fs.readFileSync(path.join(root,"app.js"),"utf8"),scope);
 
 scope.MovementScoring=require("../actions-core.js");
 vm.runInContext(fs.readFileSync(path.join(root,"actions-view.js"),"utf8"),scope);
 (async()=>{
   const get=id=>elements[id];
-  const sampleBefore=JSON.stringify(scope.exampleEnvironment);
+  const sampleBefore=JSON.stringify(scope.exampleScenario);
   const value=()=>Number(get("actions-score").textContent);
   const starting=value();
-  const reference=new scope.MovementScoring.Session(scope.exampleEnvironment);
+  const reference=new scope.MovementScoring.Session(scope.exampleScenario);
   const keyboard=async(key,target=get("actions-canvas"),extra={})=>{
     let prevented=false;await scope.document.fire("keydown",{key,target,preventDefault(){prevented=true;},...extra});return prevented;
   };
@@ -49,7 +49,7 @@ vm.runInContext(fs.readFileSync(path.join(root,"actions-view.js"),"utf8"),scope)
   assert(Math.abs(value()-expected.afterScore)<1e-6);
   assert(Math.abs(Number(get("actions-reward").textContent)-expected.reward)<1e-6);
   assert.equal(get("actions-steps").textContent,1);
-  assert.equal(JSON.stringify(scope.exampleEnvironment),sampleBefore);
+  assert.equal(JSON.stringify(scope.exampleScenario),sampleBefore);
   assert.equal(get("node-select").value,"0"); // Viewer 2 remains independent.
   assert(await keyboard("ArrowUp"));assert.equal(get("actions-steps").textContent,2);
   const scoreAfterUp=value();

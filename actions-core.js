@@ -80,7 +80,7 @@
       if(!node || node.type!=="road") throw new Error("Select a road node to move.");
       const [dx,dy]=DIRECTIONS[direction],from={x:node.x,y:node.y};
       const next={x:Math.fround(node.x+dx),y:Math.fround(node.y+dy)};
-      if(next.x===from.x && next.y===from.y) throw new Error("This coordinate is too large to represent a unit movement. Load a smaller-scale environment.");
+      if(next.x===from.x && next.y===from.y) throw new Error("This coordinate is too large to represent a unit movement. Load a smaller-scale scenario.");
       const beforeScore=this.current.score;
       node.x=next.x;node.y=next.y;
       this.current=scoreScene(this.scene);

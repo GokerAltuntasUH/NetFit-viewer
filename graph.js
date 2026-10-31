@@ -3,8 +3,8 @@
 "use strict";
 function validateScene(scene) {
   const fail = message => { throw new Error(message); };
-  if (!scene || scene.format !== "graph-workshop-environment" || scene.schema_version !== 1)
-    fail("Choose an environment JSON exported by the current workshop notebook (schema 1). A ZIP or collection manifest is not an environment.");
+  if (!scene || scene.format !== "graph-workshop-scenario" || scene.schema_version !== 1)
+    fail("Choose a scenario JSON exported by the current workshop notebook (schema 1). A ZIP or collection manifest is not a scenario.");
   for (const key of ["nodes","roads","buildings"]) if (!Array.isArray(scene[key])) fail(`Missing ${key} array.`);
   if (!scene.nodes.length || scene.nodes.length>5000 || scene.roads.length>12000 || scene.buildings.length>1500)
     fail("Use 1\u20135,000 nodes, at most 12,000 roads, and 1,500 buildings.");
@@ -40,7 +40,7 @@ function validateScene(scene) {
   if ([...scene.nodes.flatMap(n=>[n.x,n.y]),s.min_x,s.max_x,s.min_y,s.max_y].some(v=>Math.abs(v)>1e9)) fail("Coordinates must be within \u00b11,000,000,000.");
   return scene;
 }
-// Boundary contact counts as intersection, matching the workshop environment.
+// Boundary contact counts as intersection, matching the workshop scoring rules.
 function intersects(a,b,lower,upper) {
   let entry=0, exit=1;
   for (const axis of ["x","y"]) {

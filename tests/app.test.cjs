@@ -24,11 +24,11 @@ const scope={console,GraphObservations:require("../graph.js"),location:{hash:""}
   querySelectorAll:()=>["viewer-observations","viewer-actions"].map(id=>elements[id]),
   createElement:tag=>new Element(tag),createElementNS:(_,tag)=>new Element(tag),createDocumentFragment:()=>new Element("fragment")
 }};
-vm.createContext(scope);vm.runInContext(fs.readFileSync(path.join(root,"example.js"),"utf8"),scope);scope.exampleEnvironment=scope.window.exampleEnvironment;
+vm.createContext(scope);vm.runInContext(fs.readFileSync(path.join(root,"example.js"),"utf8"),scope);scope.exampleScenario=scope.window.exampleScenario;
 vm.runInContext(fs.readFileSync(path.join(root,"app.js"),"utf8"),scope);
 (async()=>{
   assert.equal(elements["viewer-observations"].hidden,false);
-  assert(!elements["viewer-environments"]);
+  assert(!elements["viewer-scenarios"]);
   assert.equal(elements["node-select"].children.length,12);
   const countBefore=elements["incoming-count"].textContent;
   elements["self-enabled"].checked=false;await elements["self-enabled"].fire("change");
@@ -52,13 +52,13 @@ vm.runInContext(fs.readFileSync(path.join(root,"app.js"),"utf8"),scope);
   const summary=elements["scene-summary"].textContent;
   elements["scene-file"].files=[{name:"bad.json",size:10,text:async()=>"not JSON"}];
   await elements["scene-file"].fire("change");assert.equal(elements["load-error"].hidden,false);assert.equal(elements["scene-summary"].textContent,summary);
-  const noRoads=JSON.parse(JSON.stringify(scope.exampleEnvironment));
+  const noRoads=JSON.parse(JSON.stringify(scope.exampleScenario));
   noRoads.nodes=noRoads.nodes.filter(n=>n.type==="building");noRoads.roads=[];
   elements["scene-file"].files=[{name:"no-roads.json",size:100,text:async()=>JSON.stringify(noRoads)}];
   await elements["scene-file"].fire("change");assert.match(elements["load-error"].textContent,/at least one road node/);
   assert.equal(elements["scene-summary"].textContent,summary);
   // Valid input with sparse IDs must use IDs, never array positions.
-  const sparse=JSON.parse(JSON.stringify(scope.exampleEnvironment));
+  const sparse=JSON.parse(JSON.stringify(scope.exampleScenario));
   sparse.nodes.forEach(n=>n.id+=1000);sparse.roads.forEach(r=>{r.source+=1000;r.target+=1000;});sparse.buildings.forEach(b=>b.corners=b.corners.map(i=>i+1000));
   elements["scene-file"].files=[{name:"sparse.json",size:100,text:async()=>JSON.stringify(sparse)}];
   await elements["scene-file"].fire("change");assert.equal(elements["load-error"].hidden,true);assert.equal(elements["node-select"].value,"1000");

@@ -17,7 +17,7 @@
     <header class="page-header">
       <p class="eyebrow">GRAPH ATTENTION WORKSHOP</p>
       <h1>NetFit Viewer</h1>
-      <p class="intro">Explore environments, inspect connections, and understand movement.</p>
+      <p class="intro">Explore scenarios, inspect connections, and understand movement.</p>
     </header>
 
     <section class="viewer-controls" aria-label="Viewer selection">
@@ -37,7 +37,7 @@
           <div><p class="eyebrow">Viewer: 1</p><h2 id="observations-title">What can this node observe?</h2><p>Choose a node to follow the messages arriving from its neighbours.</p></div>
           <button id="load-example" type="button">Use example</button>
         </div>
-        <div class="load-row"><div><label for="scene-file">Open an environment</label><input id="scene-file" type="file" accept=".json,application/json" aria-describedby="file-help"></div><p id="file-help">Choose one JSON from your notebook. Files stay in your browser.</p></div>
+        <div class="load-row"><div><label for="scene-file">Open a scenario</label><input id="scene-file" type="file" accept=".json,application/json" aria-describedby="file-help"></div><p id="file-help">Choose one JSON from your notebook. Files stay in your browser.</p></div>
         <p id="load-error" class="error" role="alert" hidden></p>
         <p id="scene-summary" class="scene-summary" role="status"></p>
         <div class="observation-options">
@@ -48,7 +48,7 @@
         <p id="direction-note" class="teaching-note"></p>
         <div class="observation-layout">
           <div class="canvas-wrap">
-            <svg id="graph-canvas" viewBox="0 0 800 620" role="group" aria-label="Environment graph. Select a node to inspect its incoming messages."></svg>
+            <svg id="graph-canvas" viewBox="0 0 800 620" role="group" aria-label="Scenario graph. Select a node to inspect its incoming messages."></svg>
             <div class="legend"><span><i class="road-key"></i>Road node / road</span><span><i class="building-key"></i>Building footprint</span><span><i class="selected-key"></i>Selected</span></div>
             <p class="canvas-caption">Click a node to inspect it. Use Open neighbourhood for details. Coordinates use x right, y up.</p>
           </div>
@@ -68,7 +68,7 @@
           <div><p class="eyebrow">Viewer: 2</p><h2 id="actions-title">How does a move change the score?</h2><p>Move a road node one unit at a time and watch the intersecting road lengths change.</p></div>
           <button id="actions-example" type="button">Use example</button>
         </div>
-        <div class="load-row"><div><label for="actions-file">Open an environment</label><input id="actions-file" type="file" accept=".json,application/json" aria-describedby="actions-file-help"></div><p id="actions-file-help">Choose one environment JSON. Buildings and road connections stay fixed.</p></div>
+        <div class="load-row"><div><label for="actions-file">Open a scenario</label><input id="actions-file" type="file" accept=".json,application/json" aria-describedby="actions-file-help"></div><p id="actions-file-help">Choose one scenario JSON. Buildings and road connections stay fixed.</p></div>
         <p id="actions-error" class="error" role="alert" hidden></p>
         <p id="actions-summary" class="scene-summary" role="status"></p>
         <div class="score-cards">
@@ -119,7 +119,7 @@
       <p id="dialog-empty" hidden>No incoming messages under these settings.</p>
       <p class="teaching-note">Only road nodes appear in this neighbourhood. Building footprints provide spatial context but send no messages.</p>
     </dialog>
-    <footer>Two focused views. One shared environment format.</footer>
+    <footer>Two focused views. One shared scenario format.</footer>
     <noscript><p>Enable JavaScript to switch between viewers.</p></noscript>
   </main>
 </body>

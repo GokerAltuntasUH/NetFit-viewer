@@ -29,7 +29,7 @@ function incoming(){return G.messageEdges({nodes:roadNodes,roads:scene.roads},[]
 function loadScene(data,label){
   const validated=G.validateScene(data);
   const roadsOnly=validated.nodes.filter(n=>n.type==="road");
-  if(!roadsOnly.length) throw new Error("Choose an environment containing at least one road node.");
+  if(!roadsOnly.length) throw new Error("Choose a scenario containing at least one road node.");
   // Preserve the current scene on parse or validation errors.
   if($("neighbourhood-dialog").open) $("neighbourhood-dialog").close();
   scene=validated;roadNodes=roadsOnly;nodes=new Map(scene.nodes.map(n=>[n.id,n]));
@@ -126,15 +126,15 @@ for(const id of ["road-direction","self-enabled","show-labels"]) $(id).addEventL
 $("open-neighbourhood").addEventListener("click",openDialog);
 $("close-dialog").addEventListener("click",()=>$("neighbourhood-dialog").close());
 $("neighbourhood-dialog").addEventListener("close",()=>$("open-neighbourhood").focus());
-$("load-example").addEventListener("click",()=>{loadVersion++;$("scene-file").value="";loadScene(exampleEnvironment,"Example \u00b7 seed 42 \u00b7 jitter 6");});
+$("load-example").addEventListener("click",()=>{loadVersion++;$("scene-file").value="";loadScene(exampleScenario,"Example \u00b7 seed 42 \u00b7 jitter 6");});
 $("scene-file").addEventListener("change",async()=>{
   const file=$("scene-file").files[0],version=++loadVersion;if(!file)return;
   try{
-    if(file.size>5*1024*1024)throw new Error("Choose an individual JSON environment smaller than 5 MB.");
+    if(file.size>5*1024*1024)throw new Error("Choose an individual JSON scenario smaller than 5 MB.");
     const text=await file.text();if(version!==loadVersion)return;
-    let data;try{data=JSON.parse(text.replace(/^\uFEFF/,""));}catch{throw new Error("This file is not valid JSON. Choose an individual environment .json, not a ZIP archive.");}
+    let data;try{data=JSON.parse(text.replace(/^\uFEFF/,""));}catch{throw new Error("This file is not valid JSON. Choose an individual scenario .json, not a ZIP archive.");}
     loadScene(data,file.name);
   }catch(error){if(version!==loadVersion)return;$("load-error").textContent=error.message;$("load-error").hidden=false;}
   finally{if(version===loadVersion)$("scene-file").value="";}
 });
-loadScene(exampleEnvironment,"Example \u00b7 seed 42 \u00b7 jitter 6");
+loadScene(exampleScenario,"Example \u00b7 seed 42 \u00b7 jitter 6");

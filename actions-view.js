@@ -16,7 +16,7 @@
   function fail(message) {get("actions-error").textContent=message;get("actions-error").hidden=false;}
   function load(data,label) {
     GraphObservations.validateScene(data);
-    if(!data.nodes.some(n=>n.type==="road"))throw new Error("Choose an environment containing road nodes.");
+    if(!data.nodes.some(n=>n.type==="road"))throw new Error("Choose a scenario containing road nodes.");
     const next=new C.Session(data);
     GraphObservations.validateScene(next.scene);
     session=next;sourceLabel=label;
@@ -122,16 +122,16 @@
     if(event.target?.closest?.("input,select,textarea,[contenteditable='true']"))return;
     event.preventDefault();move(keys[event.key]);
   });
-  get("actions-example").addEventListener("click",()=>{loadVersion++;get("actions-file").value="";load(exampleEnvironment,"Example \u00b7 seed 42 \u00b7 jitter 6");});
+  get("actions-example").addEventListener("click",()=>{loadVersion++;get("actions-file").value="";load(exampleScenario,"Example \u00b7 seed 42 \u00b7 jitter 6");});
   get("actions-file").addEventListener("change",async()=>{
     const file=get("actions-file").files[0],version=++loadVersion;if(!file)return;
     try {
-      if(file.size>5*1024*1024)throw new Error("Choose an individual environment JSON smaller than 5 MB.");
+      if(file.size>5*1024*1024)throw new Error("Choose an individual scenario JSON smaller than 5 MB.");
       const text=await file.text();if(version!==loadVersion)return;
-      let data;try {data=JSON.parse(text.replace(/^\uFEFF/,""));}catch {throw new Error("Choose an individual environment JSON, not a ZIP or invalid JSON file.");}
+      let data;try {data=JSON.parse(text.replace(/^\uFEFF/,""));}catch {throw new Error("Choose an individual scenario JSON, not a ZIP or invalid JSON file.");}
       load(data,file.name);
     } catch(error) {if(version===loadVersion)fail(error.message);}
     finally {if(version===loadVersion)get("actions-file").value="";}
   });
-  load(exampleEnvironment,"Example \u00b7 seed 42 \u00b7 jitter 6");
+  load(exampleScenario,"Example \u00b7 seed 42 \u00b7 jitter 6");
 })();

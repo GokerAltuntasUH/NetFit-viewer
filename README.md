@@ -10,7 +10,7 @@ NetFit Viewer was generated using OpenAI models. AI was used to generate and ref
 
 Open `index.html` in a browser and select **Viewer: 1**, or open `index.html#observations` directly. No installation, server, build, or Colab connection is required.
 
-- Start with the included example (seed 42, road-node jitter 6), or open an individual `graph-workshop-environment` JSON exported by the notebook.
+- Start with the included example (seed 42, road-node jitter 6), or open an individual `graph-workshop-scenario` JSON exported by the notebook.
 - Select a node from the dropdown or click it in the graph to update the inspector and highlight incoming messages. Graph nodes also support keyboard focus and Enter/Space. Use **Open neighbourhood** to open the details pop-up; selecting nodes does not open it.
 - Inspect road-node x/y coordinates and the readable node type. Displayed coordinates are rounded to three decimals; calculations use the original values.
 - Compare bidirectional road messages with one-way messages following JSON source-to-target storage order. One-way mode is an illustrative experiment, not real road direction or a learned policy.
@@ -22,7 +22,7 @@ The interactive import limits are 5 MB, 5,000 nodes, 12,000 roads, 1,500 axis-al
 
 ## Viewer: 2 - actions and rewards
 
-Select **Viewer: 2**, or open `index.html#actions`. Use the included example or load an individual environment JSON independently of Viewer: 1.
+Select **Viewer: 2**, or open `index.html#actions`. Use the included example or load an individual scenario JSON independently of Viewer: 1.
 
 - Select a road node, then use the on-screen arrows or keyboard arrow keys to move it one unit along x or y. Keyboard movement is active only in Viewer: 2 and does not override native form controls.
 - Physical road segments follow their endpoints. Red segments mark the exact length inside buildings; orange segments mark roads outside the site. Buildings remain fixed. No message arrows or neighbourhood connections are shown.
@@ -30,7 +30,7 @@ Select **Viewer: 2**, or open `index.html#actions`. Use the included example or 
 - The length cards count each physical road once. The score reproduces the source calculation: `-(0.4 * intersection penalty length + 0.6 * off-site penalty length)`. It counts both stored road directions and road self-edges, including the `0.0001` minimum for a building contact. Coordinates and moves use float32 precision. Movements are not clamped to the site.
 - Expand the scoring explanation or road-building intersection table for details. These are intersection lengths, not surface areas. No training is performed.
 
-Viewer: 2 owns a separate copy of its environment; its moves do not change Viewer: 1.
+Viewer: 2 owns a separate copy of its scenario; its moves do not change Viewer: 1.
 
 ## Files
 

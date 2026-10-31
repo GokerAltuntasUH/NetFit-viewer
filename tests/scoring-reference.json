@@ -3,7 +3,7 @@
   "cases": [
     {
       "scene": {
-        "format": "graph-workshop-environment",
+        "format": "graph-workshop-scenario",
         "schema_version": 1,
         "generator": "parcel-grid-v1",
         "seed": 0,
@@ -276,7 +276,7 @@
     },
     {
       "scene": {
-        "format": "graph-workshop-environment",
+        "format": "graph-workshop-scenario",
         "schema_version": 1,
         "generator": "parcel-grid-v1",
         "seed": 42,
@@ -796,7 +796,7 @@
     },
     {
       "scene": {
-        "format": "graph-workshop-environment",
+        "format": "graph-workshop-scenario",
         "schema_version": 1,
         "generator": "parcel-grid-v1",
         "seed": 99,
@@ -1316,7 +1316,7 @@
     },
     {
       "scene": {
-        "format": "graph-workshop-environment",
+        "format": "graph-workshop-scenario",
         "schema_version": 1,
         "generator": "parcel-grid-v1",
         "seed": 3,
@@ -1589,7 +1589,7 @@
     },
     {
       "scene": {
-        "format": "graph-workshop-environment",
+        "format": "graph-workshop-scenario",
         "schema_version": 1,
         "generator": "parcel-grid-v1",
         "seed": 18,
@@ -2454,7 +2454,7 @@
     },
     {
       "scene": {
-        "format": "graph-workshop-environment",
+        "format": "graph-workshop-scenario",
         "schema_version": 1,
         "generator": "parcel-grid-v1",
         "seed": 101,

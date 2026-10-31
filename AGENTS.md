@@ -8,7 +8,7 @@ Use one simple dropdown to select two distinct interfaces. Shared utilities are 
 
 Use **obstacle-context edges** for directed information links from intersected building corners to road-segment endpoints. These are not physical roads or attention weights.
 
-The companion notebook uses self-contained code and downloads JSON environments. Viewer files should open in a separate browser tab and accept data independently of Colab. Use the scene format `graph-workshop-environment` and the generator's documented parameters. Do not add Google connections or notebook-runtime dependencies.
+The companion notebook uses self-contained code and downloads JSON scenarios. Viewer files should open in a separate browser tab and accept data independently of Colab. Use the scene format `graph-workshop-scenario` and the generator's documented parameters. Do not add Google connections or notebook-runtime dependencies.
 
 Viewer: 1 now implements local JSON loading, graph rendering, node inspection, an incoming-neighbourhood dialog, and toggles for road message direction and self-messages. It is strictly a Day 1 road-node observation graph: no building-node markers, selection, neighbours, or obstacle-context controls. Keep buildings only as background footprints, and do not calculate context edges when loading Viewer: 1. Keep movement, reward calculation, and training out of Viewer: 1. Keep repository setup and publishing for later user instructions.
 

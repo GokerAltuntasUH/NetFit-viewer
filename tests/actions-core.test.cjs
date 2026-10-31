@@ -1,7 +1,7 @@
 "use strict";
 const assert=require("node:assert/strict"),C=require("../actions-core.js");
 const near=(a,b)=>assert(Math.abs(a-b)<1e-9*Math.max(1,Math.abs(b)),`${a} != ${b}`);
-const scene={format:"graph-workshop-environment",schema_version:1,site:{min_x:-5,max_x:5,min_y:-5,max_y:5},
+const scene={format:"graph-workshop-scenario",schema_version:1,site:{min_x:-5,max_x:5,min_y:-5,max_y:5},
   nodes:[{id:10,x:-3,y:0,type:"road"},{id:20,x:3,y:0,type:"road"},{id:100,x:-1,y:-1,type:"building"},{id:101,x:1,y:-1,type:"building"},{id:102,x:1,y:1,type:"building"},{id:103,x:-1,y:1,type:"building"}],
   roads:[{id:1,source:10,target:20}],buildings:[{id:1,corners:[100,101,102,103]}]};
 let s=new C.Session(scene);
