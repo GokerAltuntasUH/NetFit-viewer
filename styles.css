@@ -69,8 +69,8 @@ dialog { width:min(760px,calc(100% - 32px)); max-height:85vh; padding:28px; bord
 .score-card strong { display:block; font-size:clamp(1.2rem,2vw,1.7rem); margin:10px 0 8px; color:#174c69; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
 .score-card small { display:block; color:#536775; font-size:.7rem; line-height:1.5; }
 .score-card strong.improved { color:#187446; }.score-card strong.worsened { color:#ac332c; }
-#actions-canvas { display:block; width:100%; height:auto; outline-offset:-4px; }
-#actions-canvas:focus-visible { outline:3px solid #087f8c; border-radius:8px; }
+#actions-canvas, #ghosts-canvas { display:block; width:100%; height:auto; outline-offset:-4px; }
+#actions-canvas:focus-visible, #ghosts-canvas:focus-visible { outline:3px solid #087f8c; border-radius:8px; }
 .action-node { cursor:pointer; }.action-node:focus { outline:none; }.action-node:focus-visible>circle:first-child { stroke:#087f8c; stroke-width:3; }
 .legend .intersection-key { background:#ba3e36; }.legend .offsite-key { background:#b16a12; }
 .direction-pad { display:grid; grid-template-columns:repeat(3,48px); grid-template-rows:repeat(3,44px); gap:6px; justify-content:center; margin:18px 0; }
@@ -82,3 +82,6 @@ button:disabled { opacity:.45; cursor:default; }
 .score-explanation,.intersection-details { border-top:1px solid #dce3e8; margin-top:22px; padding-top:16px; font-size:.8rem; line-height:1.7; color:#536775; }
 summary { cursor:pointer; font-weight:600; color:#24485e; }
 @media(max-width:720px) { .score-cards { grid-template-columns:repeat(2,minmax(0,1fr)); }.score-card { padding:14px; } }
+
+/* Viewer: 3: obstacle-context links remain distinct from physical roads. */
+.legend .ghost-key { width:22px; height:0; border-radius:0; background:transparent; border-top:2px dashed #8055ad; }

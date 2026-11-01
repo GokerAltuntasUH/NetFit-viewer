@@ -1,6 +1,6 @@
 # NetFit Viewer
 
-A static browser interface for a graph attention workshop, with a dropdown selecting two focused viewers.
+A static browser interface for a graph attention workshop, with a dropdown selecting three focused viewers.
 
 ## AI notice
 
@@ -32,17 +32,28 @@ Select **Viewer: 2**, or open `index.html#actions`. Use the included example or 
 
 Viewer: 2 owns a separate copy of its scenario; its moves do not change Viewer: 1.
 
+## Viewer: 3 - actions with ghost edges
+
+Select **Viewer: 3**, or open `index.html#ghosts`. It has the same unit-step movement, scores, rewards, undo, reset, and local JSON loading as Viewer: 2, with an independent scene.
+
+- Dashed purple **ghost edges** are directed **obstacle-context links** from all four corners of an intersected building to both endpoints of the intersecting road. Purple corner dots identify their fixed sources; only road nodes can be selected or moved.
+- Links update after every movement, undo, reset, or scenario load. Boundary contacts count as intersections. A corner-to-endpoint link appears once even if several roads produce it.
+- Use **Show ghost edges** to hide or reveal the links. The link count describes the current geometry, including when the overlay is hidden.
+- Ghost edges provide information about obstacles. They are not physical roads or attention weights, and they do not contribute to the movement score. The physical length cards and scoring rules remain the same as Viewer: 2.
+
+Each viewer retains its own loaded scenario and selection when switching views. Movement histories are independent, and reloads restore the built-in example.
+
 ## Files
 
 - `index.html`, `styles.css`, `app.js`: interface, graph rendering, and node inspection.
-- `graph.js`: shared validation and message-edge helpers. Context-edge helpers are retained for later work but are not used by Viewer: 1.
+- `graph.js`: shared validation and message-edge helpers. Context-edge helpers are retained for later work but are not used by Viewer: 1. Viewer: 3 derives its context links from the current scoring intersections.
 - `actions-core.js`: pure clipping, scoring, unit-step movement, undo, and reset.
-- `actions-view.js`: independent Viewer: 2 interface and movement controls.
+- `actions-view.js`: shared movement interface with separate Viewer: 2 and Viewer: 3 sessions; ghost-edge rendering is exclusive to Viewer: 3.
 - `example.js`: built-in workshop-generator scene; embedded so opening local files works without fetching JSON.
 - `tests/graph.test.cjs`: dependency-free geometry/graph checks; run `node tests/graph.test.cjs`.
 - `tests/app.test.cjs`: isolated DOM test double for control and import behaviour; run `node tests/app.test.cjs`. This does not replace a visual browser check.
 
-Additional checks: `node tests/actions-core.test.cjs` compares 66 scores against fixtures produced by the original Python scoring function and checks movement and contact cases. `node tests/actions-view.test.cjs` checks controls, keyboard scoping, import handling, and Viewer: 1 isolation using a DOM test double. Reference values are stored in `tests/scoring-reference.json`.
+Additional checks: `node tests/actions-core.test.cjs` compares 66 scores against fixtures produced by the original Python scoring function and checks movement and contact cases. `node tests/actions-view.test.cjs` checks controls, keyboard scoping, import handling, scene isolation, and Viewer: 3 ghost-edge direction, deduplication, boundary contacts, and live updates using a DOM test double. Reference values are stored in `tests/scoring-reference.json`.
 
 ## Static hosting
 

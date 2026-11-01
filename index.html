@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Two focused viewers for a graph attention workshop.">
+  <meta name="description" content="Three focused viewers for a graph attention workshop.">
   <title>NetFit Viewer</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="./graph.js" defer></script>
@@ -23,9 +23,10 @@
     <section class="viewer-controls" aria-label="Viewer selection">
       <div class="select-field">
         <label for="viewer-select">Choose a viewer</label>
-        <select id="viewer-select" aria-controls="viewer-observations viewer-actions">
+        <select id="viewer-select" aria-controls="viewer-observations viewer-actions viewer-ghosts">
           <option value="observations">Viewer: 1</option>
           <option value="actions">Viewer: 2</option>
+          <option value="ghosts">Viewer: 3</option>
         </select>
       </div>
       <span class="status" id="view-status">Interactive viewer</span>
@@ -111,6 +112,57 @@
           <p id="actions-no-hits" class="muted">No road segments touch or cross a building.</p>
         </details>
       </section>
+
+      <section id="viewer-ghosts" class="viewer-panel" aria-labelledby="ghosts-title" hidden>
+        <div class="observation-heading">
+          <div><p class="eyebrow">Viewer: 3</p><h2 id="ghosts-title">How do obstacles connect to the road graph?</h2><p>Move road nodes and watch ghost edges connect intersected buildings to road endpoints.</p></div>
+          <button id="ghosts-example" type="button">Use example</button>
+        </div>
+        <div class="load-row"><div><label for="ghosts-file">Open a scenario</label><input id="ghosts-file" type="file" accept=".json,application/json" aria-describedby="ghosts-file-help"></div><p id="ghosts-file-help">Choose one scenario JSON. Buildings and road connections stay fixed.</p></div>
+        <p id="ghosts-error" class="error" role="alert" hidden></p>
+        <p id="ghosts-summary" class="scene-summary" role="status"></p>
+        <div class="observation-options"><label class="check"><input type="checkbox" id="ghosts-enabled" checked> Show ghost edges (obstacle-context links)</label></div>
+        <p id="ghosts-count" class="teaching-note" role="status"></p>
+        <div class="score-cards">
+          <div class="score-card"><span>Current score</span><strong id="ghosts-score">0</strong><small>Closer to zero is better</small></div>
+          <div class="score-card"><span>Last move reward</span><strong id="ghosts-reward">&mdash;</strong><small>New score minus previous score</small></div>
+          <div class="score-card"><span>Inside buildings</span><strong id="ghosts-intersection">0</strong><small>Physical road length</small></div>
+          <div class="score-card"><span>Outside site</span><strong id="ghosts-offsite">0</strong><small>Physical road length</small></div>
+        </div>
+        <div class="observation-layout ghosts-layout">
+          <div class="canvas-wrap">
+            <svg id="ghosts-canvas" viewBox="0 0 800 620" tabindex="0" role="group" aria-label="Road layout. Select a node, then use arrow keys to move it one unit." aria-describedby="ghosts-movement-help"></svg>
+            <div class="legend"><span><i class="road-key"></i>Road</span><span><i class="ghost-key"></i>Ghost edge: building &rarr; road</span><span><i class="intersection-key"></i>Inside a building</span><span><i class="offsite-key"></i>Outside the site</span><span><i class="selected-key"></i>Selected node</span></div>
+            <p class="canvas-caption">Dashed purple arrows carry obstacle context from all four corners of an intersected building to both road endpoints. These links are not physical roads or attention weights.</p>
+          </div>
+          <aside class="inspector" aria-label="Movement controls">
+            <label for="ghosts-node">Move a road node</label><select id="ghosts-node"></select>
+            <h3 id="ghosts-node-title"></h3><dl class="feature-grid" id="ghosts-coordinates"></dl>
+            <p id="ghosts-movement-help" class="muted">Click a node, then use your keyboard arrows or these buttons. Each press moves it by 1 unit.</p>
+            <div class="direction-pad" aria-label="Move selected node">
+              <button id="ghosts-move-up" class="move-up" type="button" aria-label="Move up one unit" title="Up: y + 1">&#8593;</button>
+              <button id="ghosts-move-left" class="move-left" type="button" aria-label="Move left one unit" title="Left: x - 1">&#8592;</button>
+              <span class="move-step" aria-hidden="true">1</span>
+              <button id="ghosts-move-right" class="move-right" type="button" aria-label="Move right one unit" title="Right: x + 1">&#8594;</button>
+              <button id="ghosts-move-down" class="move-down" type="button" aria-label="Move down one unit" title="Down: y - 1">&#8595;</button>
+            </div>
+            <div class="action-tools"><button id="ghosts-undo" type="button" disabled>Undo</button><button id="ghosts-reset" type="button" disabled>Reset layout</button></div>
+            <p id="ghosts-change" class="movement-status" role="status" aria-live="polite">Select a node to begin.</p>
+            <dl class="feature-grid"><dt>Moves</dt><dd id="ghosts-steps">0</dd><dt>Starting score</dt><dd id="ghosts-start">0</dd></dl>
+          </aside>
+        </div>
+        <details class="score-explanation">
+          <summary>How is the score calculated?</summary>
+          <p>Score = &minus;(0.4 &times; intersection penalty length + 0.6 &times; off-site penalty length). Each road is counted in both stored directions. A building contact contributes at least 0.0001, including a road node's self-edge when it touches or enters a building. The length cards above count each physical road once.</p>
+          <p id="ghosts-formula"></p>
+          <p>A positive reward means the last move improved the score. Connected segments follow the moved node; the road connections do not change. Boundary nodes can move off-site. Coordinates use the original 32-bit movement precision.</p>
+        </details>
+        <details class="intersection-details">
+          <summary>Intersecting road segments <span id="ghosts-hit-count"></span></summary>
+          <div class="table-scroll"><table><caption>Physical intersection lengths, each road counted once per building</caption><thead><tr><th scope="col">Road</th><th scope="col">Endpoints</th><th scope="col">Building</th><th scope="col">Length</th></tr></thead><tbody id="ghosts-hits"></tbody></table></div>
+          <p id="ghosts-no-hits" class="muted">No road segments touch or cross a building.</p>
+        </details>
+      </section>
     </div>
     <dialog id="neighbourhood-dialog" aria-labelledby="dialog-title">
       <div class="dialog-heading"><div><p class="eyebrow">INCOMING NEIGHBOURHOOD</p><h2 id="dialog-title"></h2></div><button id="close-dialog" type="button" autofocus>Close</button></div>
@@ -119,7 +171,7 @@
       <p id="dialog-empty" hidden>No incoming messages under these settings.</p>
       <p class="teaching-note">Only road nodes appear in this neighbourhood. Building footprints provide spatial context but send no messages.</p>
     </dialog>
-    <footer>Two focused views. One shared scenario format.</footer>
+    <footer>Three focused views. One shared scenario format.</footer>
     <noscript><p>Enable JavaScript to switch between viewers.</p></noscript>
   </main>
 </body>

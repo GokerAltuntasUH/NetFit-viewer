@@ -21,7 +21,7 @@ for(const match of html.matchAll(/<([a-z0-9]+)\b[^>]*\bid="([^"]+)"[^>]*>/g)){
 elements["viewer-select"].value="observations";elements["road-direction"].value="both";
 const scope={console,GraphObservations:require("../graph.js"),location:{hash:""},window:{},document:{
   getElementById:id=>{assert(elements[id],`Missing HTML id ${id}`);return elements[id];},
-  querySelectorAll:()=>["viewer-observations","viewer-actions"].map(id=>elements[id]),
+  querySelectorAll:()=>["viewer-observations","viewer-actions","viewer-ghosts"].map(id=>elements[id]),
   createElement:tag=>new Element(tag),createElementNS:(_,tag)=>new Element(tag),createDocumentFragment:()=>new Element("fragment")
 }};
 vm.createContext(scope);vm.runInContext(fs.readFileSync(path.join(root,"example.js"),"utf8"),scope);scope.exampleScenario=scope.window.exampleScenario;

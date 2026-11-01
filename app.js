@@ -10,7 +10,7 @@ function selectViewer() {
   $("view-status").textContent="Interactive viewer";
 }
 selector.addEventListener("change",selectViewer);
-if (["#observations","#actions"].includes(location.hash)) selector.value=location.hash.slice(1);
+if (["#observations","#actions","#ghosts"].includes(location.hash)) selector.value=location.hash.slice(1);
 selectViewer();
 function el(tag,text,className) {
   const node=document.createElement(tag);
