@@ -2,10 +2,11 @@
 
 Build a lightweight static web application for an introductory graph attention workshop. The project is named NetFit Viewer. GitHub Pages is the future target; keep relative asset paths and avoid requiring a server-side runtime.
 
-Use one simple dropdown to select three distinct interfaces. Shared utilities are welcome; each view must expose only its relevant capabilities:
+Use one simple dropdown to select four distinct interfaces. Shared utilities are welcome; each view must expose only its relevant capabilities:
 - Viewer: 1 - node features, incoming neighbours, edge types, and message direction.
 - Viewer: 2 - four unit-step road-node movements, scores, undo, and reset.
 - Viewer: 3 - the same movement/scoring interface as Viewer: 2, plus directed ghost edges (obstacle-context links).
+- Viewer: 4 - MazeViewer, with isolated tabular Q-learning, a directional Q-table, and linked update equations.
 
 Use **obstacle-context edges** for directed information links from intersected building corners to road-segment endpoints. These are not physical roads or attention weights.
 
@@ -22,3 +23,5 @@ Viewer: 2 is implemented in `actions-core.js` and `actions-view.js`. Keep its sc
 Run `tests/actions-core.test.cjs` for Python-reference scoring comparisons and `tests/actions-view.test.cjs` for isolated DOM control checks, alongside the existing graph/app checks. DOM doubles do not verify visual layout. Keep scripts ASCII with Unicode escapes and HTML entities to avoid encoding corruption on Windows.
 
 Viewer: 3 shares the movement controller in `actions-view.js` but owns a separate scene and history. Its ghost edges are directed, dashed links from all four corners of intersected buildings to both road endpoints, deduplicated per corner/endpoint pair. Recompute links from current clipped intersections after moves, undo, reset, and loads; boundary contacts count. Ghost edges are information links only, never physical roads, score penalties, or attention weights. Keep them exclusive to Viewer: 3.
+
+Viewer: 4 is MazeViewer, a separate tabular Q-learning playbox using the fixed 5x5 student maze. Keep its state isolated from the graph scenes. `maze-core.js` owns transitions, Q updates and a local NumPy-compatible legacy RNG; `maze-view.js` owns controls and rendering. Keep manual/agent steps, new episodes, adjustable ordinary/goal/wall rewards, initial Q, seed, and Apply & reset. Preserve floating-point Q-values and terminal future value zero. Gold links new Q to the updated table entry; purple links the pre-update next-state maximum only to surviving source entries, including ties. Old/overwritten values remain neutral. Equations stay under the grid. Keep all four viewers usable offline, with no Colab or server dependency. Run `node tests/maze-core.test.cjs` and `node tests/maze-view.test.cjs` along with existing checks; visually inspect the browser layout too.

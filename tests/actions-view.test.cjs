@@ -24,7 +24,7 @@ const scope={console,GraphObservations:require("../graph.js"),location:{hash:"#a
   addEventListener(name,cb){(this.events[name]??=[]).push(cb);},
   async fire(name,event){for(const cb of this.events[name]??[])await cb(event);},
   getElementById:id=>{assert(elements[id],`Missing HTML id ${id}`);return elements[id];},
-  querySelectorAll:()=>["viewer-observations","viewer-actions","viewer-ghosts"].map(id=>elements[id]),
+  querySelectorAll:()=>["viewer-observations","viewer-actions","viewer-ghosts","viewer-maze"].map(id=>elements[id]),
   createElement:tag=>new Element(tag),createElementNS:(_,tag)=>new Element(tag),createDocumentFragment:()=>new Element("fragment")
 }};
 vm.createContext(scope);vm.runInContext(fs.readFileSync(path.join(root,"example.js"),"utf8"),scope);scope.exampleScenario=scope.window.exampleScenario;

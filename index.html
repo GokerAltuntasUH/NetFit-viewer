@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Three focused viewers for a graph attention workshop.">
+  <meta name="description" content="Four focused viewers for graph observations, actions, and Q-learning.">
   <title>NetFit Viewer</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="./graph.js" defer></script>
@@ -11,6 +11,8 @@
   <script src="./app.js" defer></script>
   <script src="./actions-core.js" defer></script>
   <script src="./actions-view.js" defer></script>
+  <script src="./maze-core.js" defer></script>
+  <script src="./maze-view.js" defer></script>
 </head>
 <body>
   <main class="workspace">
@@ -23,10 +25,11 @@
     <section class="viewer-controls" aria-label="Viewer selection">
       <div class="select-field">
         <label for="viewer-select">Choose a viewer</label>
-        <select id="viewer-select" aria-controls="viewer-observations viewer-actions viewer-ghosts">
+        <select id="viewer-select" aria-controls="viewer-observations viewer-actions viewer-ghosts viewer-maze">
           <option value="observations">Viewer: 1</option>
           <option value="actions">Viewer: 2</option>
           <option value="ghosts">Viewer: 3</option>
+          <option value="maze">Viewer: 4 - MazeViewer</option>
         </select>
       </div>
       <span class="status" id="view-status">Interactive viewer</span>
@@ -163,6 +166,55 @@
           <p id="ghosts-no-hits" class="muted">No road segments touch or cross a building.</p>
         </details>
       </section>
+
+      <section id="viewer-maze" class="viewer-panel" aria-labelledby="maze-title" hidden>
+        <div class="observation-heading">
+          <div><p class="eyebrow">Viewer: 4</p><h2 id="maze-title">MazeViewer</h2><p>Follow one move and one Q-learning update at a time.</p></div>
+        </div>
+        <div class="score-cards">
+          <div class="score-card"><span>Episode</span><strong id="maze-episode">1</strong></div>
+          <div class="score-card"><span>Moves</span><strong id="maze-steps">0 / 100</strong></div>
+          <div class="score-card"><span>Total reward</span><strong id="maze-return">0</strong></div>
+          <div class="score-card"><span>Exploration (epsilon)</span><strong id="maze-epsilon">1.0000</strong></div>
+        </div>
+        <div class="observation-layout maze-layout">
+          <div class="canvas-wrap">
+            <svg id="maze-canvas" viewBox="0 0 604 582" tabindex="0" role="group" aria-label="Maze Q-table. Arrow keys take one move and update its Q-value."></svg>
+            <div class="legend"><span><i class="maze-agent-key"></i>A: agent</span><span>S: start</span><span>G: goal</span><span>Row down, column right</span></div>
+            <div class="maze-equations" aria-label="Q-learning equation" aria-live="polite" aria-atomic="true">
+              <h3>Q-learning update</h3>
+              <div id="maze-symbolic" class="maze-equation"></div>
+              <div id="maze-numeric" class="maze-equation"></div>
+              <p id="maze-equation-note" class="muted"></p>
+            </div>
+          </div>
+          <aside class="inspector" aria-label="Maze controls">
+            <h3 class="maze-control-title">Take a move</h3>
+            <div class="direction-pad" aria-label="Move the agent">
+              <button id="maze-up" class="move-up" type="button" aria-label="Move up">&#8593;</button>
+              <button id="maze-left" class="move-left" type="button" aria-label="Move left">&#8592;</button>
+              <span class="move-step" aria-hidden="true">A</span>
+              <button id="maze-right" class="move-right" type="button" aria-label="Move right">&#8594;</button>
+              <button id="maze-down" class="move-down" type="button" aria-label="Move down">&#8595;</button>
+            </div>
+            <button id="maze-agent" type="button" class="primary">Agent step</button>
+            <button id="maze-new-episode" type="button" class="maze-wide" disabled>New episode</button>
+            <p id="maze-progress" class="muted" role="status"></p>
+            <div class="maze-settings">
+              <h3>Learning settings</h3>
+              <label for="maze-step-reward">Ordinary reward</label><input id="maze-step-reward" type="number" step="any" value="-1">
+              <label for="maze-goal-reward">Exit reward</label><input id="maze-goal-reward" type="number" step="any" value="10">
+              <label for="maze-wall-reward">Wall / outside reward</label><input id="maze-wall-reward" type="number" step="any" value="-5">
+              <label for="maze-initial-q">Initial Q-value</label><input id="maze-initial-q" type="number" step="any" value="0">
+              <label for="maze-seed">Random seed</label><input id="maze-seed" type="number" step="1" min="0" max="4294967295" value="42">
+              <button id="maze-apply" class="maze-wide" type="button">Apply &amp; reset</button>
+              <p id="maze-pending" class="muted" hidden>Settings changed. Apply &amp; reset to use them.</p>
+              <p id="maze-error" class="error" role="alert" hidden></p>
+              <p class="muted">Learning rate &alpha; = 0.1 &middot; Discount &gamma; = 0.9</p>
+            </div>
+          </aside>
+        </div>
+      </section>
     </div>
     <dialog id="neighbourhood-dialog" aria-labelledby="dialog-title">
       <div class="dialog-heading"><div><p class="eyebrow">INCOMING NEIGHBOURHOOD</p><h2 id="dialog-title"></h2></div><button id="close-dialog" type="button" autofocus>Close</button></div>
@@ -171,7 +223,7 @@
       <p id="dialog-empty" hidden>No incoming messages under these settings.</p>
       <p class="teaching-note">Only road nodes appear in this neighbourhood. Building footprints provide spatial context but send no messages.</p>
     </dialog>
-    <footer>Three focused views. One shared scenario format.</footer>
+    <footer>Four focused views for exploring graphs, actions, and learning.</footer>
     <noscript><p>Enable JavaScript to switch between viewers.</p></noscript>
   </main>
 </body>

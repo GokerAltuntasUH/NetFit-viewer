@@ -1,6 +1,6 @@
 # NetFit Viewer
 
-A static browser interface for a graph attention workshop, with a dropdown selecting three focused viewers.
+A static browser interface for a graph attention workshop, with a dropdown selecting four focused viewers.
 
 ## AI notice
 
@@ -43,12 +43,23 @@ Select **Viewer: 3**, or open `index.html#ghosts`. It has the same unit-step mov
 
 Each viewer retains its own loaded scenario and selection when switching views. Movement histories are independent, and reloads restore the built-in example.
 
+## Viewer: 4 - MazeViewer
+
+Select **Viewer: 4 - MazeViewer**, or open `index.html#maze`. This ports the notebook playbox to a standalone browser view of the same 5x5 maze.
+
+- Each open position contains four directional Q-values. Use the arrow buttons or keyboard arrows for a manual learning step; **Agent step** uses epsilon-greedy exploration and random tie-breaking.
+- **New episode** returns to the start, retaining Q and decaying epsilon. Episodes stop at the exit or 100 moves. **Apply & reset** applies ordinary, exit and wall rewards, initial Q, and the seed, then restarts learning. Decimal values are preserved. Wall reward includes attempts to leave the maze.
+- Symbolic and numeric equations appear below the grid. Gold identifies the new Q-value; purple identifies the next-state maximum actually used, including surviving ties. Overwritten values remain neutral; terminal moves use zero future value.
+- Defaults match the notebook: alpha 0.1, gamma 0.9, epsilon 1.0 with decay 0.99 and minimum 0.01. The local MT19937 generator follows NumPy RandomState sampling for repeatable agent decisions. Switching viewers preserves the maze session. The road-graph viewers keep their own independent state.
+- MazeViewer uses its built-in maze; road-scenario JSON import belongs to Viewers 1-3. No Python, notebook connection, build or network request is required.
+
 ## Files
 
 - `index.html`, `styles.css`, `app.js`: interface, graph rendering, and node inspection.
 - `graph.js`: shared validation and message-edge helpers. Context-edge helpers are retained for later work but are not used by Viewer: 1. Viewer: 3 derives its context links from the current scoring intersections.
 - `actions-core.js`: pure clipping, scoring, unit-step movement, undo, and reset.
 - `actions-view.js`: shared movement interface with separate Viewer: 2 and Viewer: 3 sessions; ghost-edge rendering is exclusive to Viewer: 3.
+- `maze-core.js`, `maze-view.js`: isolated Q-learning logic, deterministic RNG, maze controls and linked equations.
 - `example.js`: built-in workshop-generator scene; embedded so opening local files works without fetching JSON.
 - `tests/graph.test.cjs`: dependency-free geometry/graph checks; run `node tests/graph.test.cjs`.
 - `tests/app.test.cjs`: isolated DOM test double for control and import behaviour; run `node tests/app.test.cjs`. This does not replace a visual browser check.
@@ -57,4 +68,6 @@ Additional checks: `node tests/actions-core.test.cjs` compares 66 scores against
 
 ## Static hosting
 
-All assets use relative paths and are suitable for a GitHub Pages project site. Keep `index.html`, `styles.css`, `graph.js`, `example.js`, `app.js`, `actions-core.js`, and `actions-view.js` together in the published directory. No server-side runtime or build step is required. The built-in example also works when opening `index.html` locally.
+All assets use relative paths and are suitable for a GitHub Pages project site. Keep `index.html`, `styles.css`, `graph.js`, `example.js`, `app.js`, `actions-core.js`, `actions-view.js`, `maze-core.js`, and `maze-view.js` together in the published directory. No server-side runtime or build step is required. The built-in example also works when opening `index.html` locally.
+
+Maze checks: `node tests/maze-core.test.cjs` compares a full seeded training run against NumPy fixtures and checks updates/settings/color links. `node tests/maze-view.test.cjs` checks the fourth viewer, controls, keyboard scope, equations and session isolation.

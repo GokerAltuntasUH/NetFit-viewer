@@ -85,3 +85,28 @@ summary { cursor:pointer; font-weight:600; color:#24485e; }
 
 /* Viewer: 3: obstacle-context links remain distinct from physical roads. */
 .legend .ghost-key { width:22px; height:0; border-radius:0; background:transparent; border-top:2px dashed #8055ad; }
+
+/* Viewer: 4: independent tabular Q-learning. */
+#maze-canvas { display:block; width:100%; height:auto; background:white; outline-offset:-4px; }
+#maze-canvas:focus-visible { outline:3px solid #2563eb; }
+.maze-triangle { fill:white; stroke:#b8bec8; stroke-width:.6; }
+.maze-triangle.maze-updated-fill { fill:#fff0bd; }
+.maze-triangle.maze-future-fill { fill:#f0e8fc; }
+.maze-triangle.maze-positive { fill:#e3f3e9; }
+.maze-grid-line { stroke:#253247; stroke-width:1.9; }
+.maze-value { fill:#172b3a; font-size:11px; font-variant-numeric:tabular-nums; }
+.maze-untried { fill:#677383; }
+.maze-updated { color:#975600; fill:#975600; font-weight:700; }
+.maze-future { color:#6941c6; fill:#6941c6; font-weight:700; }
+.maze-wall-label { fill:#536775; font-size:11px; font-weight:600; }
+.maze-marker { fill:white; font-size:12px; font-weight:700; }
+.maze-axis { fill:#536775; font-size:12px; }
+.maze-equations { padding:0 18px 18px; border-top:1px solid #dce3e8; }
+.maze-equation { font-family:Cambria,Georgia,serif; font-size:clamp(.95rem,1.6vw,1.2rem); line-height:2.2; overflow-wrap:anywhere; margin:12px 0; }
+.maze-equation sub { font-size:.7em; }
+.maze-control-title { margin-top:0; }
+.maze-wide { width:100%; margin-top:12px; }
+.maze-settings { margin-top:22px; padding-top:4px; border-top:1px solid #dce3e8; }
+.maze-settings input { width:100%; min-height:40px; font:inherit; padding:8px 10px; border:1px solid #b9c8d2; border-radius:6px; background:#f8fafc; color:#172b3a; }
+.maze-settings label { margin:14px 0 6px; }
+@media(max-width:900px) { .maze-layout .inspector { order:-1; }.maze-settings { display:grid; grid-template-columns:1fr 1fr; gap:8px 12px; }.maze-settings h3,.maze-settings button,.maze-settings p { grid-column:1/-1; }.maze-settings label { align-self:center; margin:0; } }
