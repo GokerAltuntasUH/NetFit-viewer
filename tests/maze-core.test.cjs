@@ -27,4 +27,14 @@ session.reset();session.q[0][0]=[-60,-50,-60,-60];session.step(1);assert.equal(s
 for(const input of [{initialQ:NaN},{goalReward:Infinity},{seed:-1},{seed:1.5},{seed:4294967296}])assert.throws(()=>new M.Session(input));
 const left=new M.Session(),right=new M.Session();left.step(3);assert.equal(right.q[0][0][3],0);
 const once=right.agentStep();right.reset();assert.deepEqual(right.agentStep(),once);
+// Adjustable alpha/gamma must affect the update, including endpoints.
+session=new M.Session({initialQ:-1,alpha:0.5,gamma:0.25});session.step(3);close(session.q[0][0][3],-1.125);
+assert.equal(session.last.alpha,0.5);assert.equal(session.last.gamma,0.25);
+session=new M.Session({initialQ:-1,alpha:0});session.step(3);assert.equal(session.q[0][0][3],-1);
+session=new M.Session({initialQ:-1,alpha:1});session.step(3);close(session.q[0][0][3],-1.9);
+session=new M.Session({initialQ:-2,alpha:0.5,gamma:0});session.step(3);close(session.q[0][0][3],-1.5);
+session=new M.Session({initialQ:-2,alpha:0.5,gamma:1});session.step(3);close(session.q[0][0][3],-2.5);
+for(const alpha of [-0.1,1.1])assert.throws(()=>new M.Session({alpha}),/Learning rate/);
+for(const gamma of [-0.1,1.1])assert.throws(()=>new M.Session({gamma}),/Discount factor/);
 console.log("PASS: 560 episodes match NumPy (actions, episode lengths, returns, Q), decimals, terminal values, color sources, reset, isolation and validation.");
+console.log("PASS: adjustable alpha/gamma, endpoint behavior, recorded coefficients and range validation.");

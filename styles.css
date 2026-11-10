@@ -98,6 +98,8 @@ summary { cursor:pointer; font-weight:600; color:#24485e; }
 .maze-untried { fill:#677383; }
 .maze-updated { color:#975600; fill:#975600; font-weight:700; }
 .maze-future { color:#6941c6; fill:#6941c6; font-weight:700; }
+.maze-alpha { color:#087779; font-weight:700; }
+.maze-gamma { color:#b42353; font-weight:700; }
 .maze-wall-label { fill:#536775; font-size:11px; font-weight:600; }
 .maze-marker { fill:white; font-size:12px; font-weight:700; }
 .maze-axis { fill:#536775; font-size:12px; }
@@ -108,5 +110,7 @@ summary { cursor:pointer; font-weight:600; color:#24485e; }
 .maze-wide { width:100%; margin-top:12px; }
 .maze-settings { margin-top:22px; padding-top:4px; border-top:1px solid #dce3e8; }
 .maze-settings input { width:100%; min-height:40px; font:inherit; padding:8px 10px; border:1px solid #b9c8d2; border-radius:6px; background:#f8fafc; color:#172b3a; }
+.maze-settings input.maze-alpha { color:#087779; border-color:#087779; background:#eefafa; }
+.maze-settings input.maze-gamma { color:#b42353; border-color:#b42353; background:#fff2f5; }
 .maze-settings label { margin:14px 0 6px; }
 @media(max-width:900px) { .maze-layout .inspector { order:-1; }.maze-settings { display:grid; grid-template-columns:1fr 1fr; gap:8px 12px; }.maze-settings h3,.maze-settings button,.maze-settings p { grid-column:1/-1; }.maze-settings label { align-self:center; margin:0; } }

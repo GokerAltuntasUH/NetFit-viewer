@@ -3,7 +3,8 @@
   "use strict";
   const get=id=>document.getElementById(id), M=MazeLearning;
   const fieldKeys={"maze-step-reward":"stepReward","maze-goal-reward":"goalReward",
-    "maze-wall-reward":"wallReward","maze-initial-q":"initialQ","maze-seed":"seed"};
+    "maze-wall-reward":"wallReward","maze-initial-q":"initialQ","maze-seed":"seed",
+    "maze-alpha":"alpha","maze-gamma":"gamma"};
   const arrows=["\u2191","\u2193","\u2190","\u2192"];
   const format=value=>Number(value.toPrecision(6)).toString();
   let session=new M.Session();
@@ -47,7 +48,8 @@
     }
     q(symbolic,"new","(s, a)",last?"updated":"");
     symbolic.append(node("span"," = "));q(symbolic,"old","(s, a)");
-    symbolic.append(node("span"," + \u03b1 [ r + \u03b3 "));
+    symbolic.append(node("span"," + "),node("span","\u03b1","maze-alpha"),
+      node("span"," [ r + "),node("span","\u03b3","maze-gamma"),node("span"," "));
     if(last&&last.done)symbolic.append(node("span","0"));
     else {
       const future=node("span",undefined,links.role?`maze-${links.role}`:"");
@@ -60,7 +62,9 @@
       get("maze-equation-note").textContent="";return;
     }
     numeric.append(node("span",format(last.newValue),"maze-updated"),
-      node("span",` = ${format(last.old)} + ${format(last.alpha)} [ ${format(last.reward)} + ${format(last.gamma)} \u00d7 `),
+      node("span",` = ${format(last.old)} + `),node("span",format(last.alpha),"maze-alpha"),
+      node("span",` [ ${format(last.reward)} + `),node("span",format(last.gamma),"maze-gamma"),
+      node("span"," \u00d7 "),
       node("span",`(${format(last.future)})`,links.role?`maze-${links.role}`:""),
       node("span",` \u2212 (${format(last.old)}) ]`));
     let note="Gold: the updated Q-value. The overwritten old value stays neutral. ";

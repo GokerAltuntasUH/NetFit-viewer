@@ -206,11 +206,12 @@
               <label for="maze-goal-reward">Exit reward</label><input id="maze-goal-reward" type="number" step="any" value="10">
               <label for="maze-wall-reward">Wall / outside reward</label><input id="maze-wall-reward" type="number" step="any" value="-5">
               <label for="maze-initial-q">Initial Q-value</label><input id="maze-initial-q" type="number" step="any" value="0">
+              <label for="maze-alpha" class="maze-alpha">Learning rate &alpha;</label><input id="maze-alpha" class="maze-alpha" type="number" step="0.01" min="0" max="1" value="0.1" title="0 keeps the old estimate; 1 uses the new target.">
+              <label for="maze-gamma" class="maze-gamma">Discount factor &gamma;</label><input id="maze-gamma" class="maze-gamma" type="number" step="0.01" min="0" max="1" value="0.9" title="0 uses only the immediate reward; 1 gives the future estimate full weight.">
               <label for="maze-seed">Random seed</label><input id="maze-seed" type="number" step="1" min="0" max="4294967295" value="42">
               <button id="maze-apply" class="maze-wide" type="button">Apply &amp; reset</button>
               <p id="maze-pending" class="muted" hidden>Settings changed. Apply &amp; reset to use them.</p>
               <p id="maze-error" class="error" role="alert" hidden></p>
-              <p class="muted">Learning rate &alpha; = 0.1 &middot; Discount &gamma; = 0.9</p>
             </div>
           </aside>
         </div>

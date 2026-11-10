@@ -45,8 +45,11 @@
     }
     if(!Number.isInteger(value.seed)||value.seed<0||value.seed>4294967295)
       throw new Error("Seed must be a whole number from 0 to 4294967295.");
-    if(value.alpha<0||value.alpha>1||value.gamma<0||value.gamma>1 ||
-       value.epsilonStart<0||value.epsilonStart>1||value.epsilonMin<0||
+    if(value.alpha<0||value.alpha>1)
+      throw new Error("Learning rate (alpha) must be between 0 and 1.");
+    if(value.gamma<0||value.gamma>1)
+      throw new Error("Discount factor (gamma) must be between 0 and 1.");
+    if(value.epsilonStart<0||value.epsilonStart>1||value.epsilonMin<0||
        value.epsilonMin>value.epsilonStart||value.epsilonDecay<0||value.epsilonDecay>1 ||
        !Number.isInteger(value.maxSteps)||value.maxSteps<1)
       throw new Error("Invalid learning settings.");
